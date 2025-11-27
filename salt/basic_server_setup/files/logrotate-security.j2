@@ -1,0 +1,18 @@
+# Managed by Salt - DO NOT EDIT MANUALLY
+/var/log/auth.log
+/var/log/sudo.log
+/var/log/ssh.log
+/var/log/ufw.log
+/var/log/critical.log
+{
+    weekly
+    rotate 12
+    missingok
+    notifempty
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+        /usr/lib/rsyslog/rsyslog-rotate
+    endscript
+}

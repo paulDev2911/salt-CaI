@@ -1,0 +1,9 @@
+# Managed by Salt - DO NOT EDIT MANUALLY
+[sshd]
+enabled = true
+port = {{ ssh_port }}
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = {{ maxretry }}
+bantime = {{ bantime }}
+findtime = {{ findtime }}

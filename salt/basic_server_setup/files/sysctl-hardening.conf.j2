@@ -1,0 +1,147 @@
+# Managed by Salt - DO NOT EDIT MANUALLY
+# Kernel hardening configuration for enhanced security
+
+###############################################################################
+# Network Security
+###############################################################################
+
+# IP Forwarding (disable unless this is a router)
+net.ipv4.ip_forward = {{ ip_forward }}
+net.ipv6.conf.all.forwarding = {{ ipv6_forwarding }}
+
+# Disable source packet routing
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv6.conf.all.accept_source_route = 0
+net.ipv6.conf.default.accept_source_route = 0
+
+# Enable reverse path filtering (anti-spoofing)
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+
+# Disable ICMP redirects
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv4.conf.all.secure_redirects = 0
+net.ipv4.conf.default.secure_redirects = 0
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+
+# Do not send ICMP redirects
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+
+# Ignore ICMP ping requests
+net.ipv4.icmp_echo_ignore_all = {{ ignore_ping }}
+
+# Ignore broadcast ICMP requests
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+
+# Ignore bogus ICMP error responses
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+
+# Enable SYN cookies for SYN flood protection
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_syn_retries = 2
+net.ipv4.tcp_synack_retries = 2
+net.ipv4.tcp_max_syn_backlog = 4096
+
+# TCP hardening
+net.ipv4.tcp_timestamps = 1
+net.ipv4.tcp_fin_timeout = 15
+net.ipv4.tcp_keepalive_time = 300
+net.ipv4.tcp_keepalive_probes = 5
+net.ipv4.tcp_keepalive_intvl = 15
+
+# Disable IPv6 router advertisements
+net.ipv6.conf.all.accept_ra = 0
+net.ipv6.conf.default.accept_ra = 0
+
+# Log suspicious packets (Martian packets)
+net.ipv4.conf.all.log_martians = 1
+net.ipv4.conf.default.log_martians = 1
+
+###############################################################################
+# Kernel Security
+###############################################################################
+
+# Enable ASLR (Address Space Layout Randomization)
+kernel.randomize_va_space = 2
+
+# Restrict kernel pointer exposure in /proc
+kernel.kptr_restrict = 2
+
+# Restrict access to kernel logs
+kernel.dmesg_restrict = 1
+
+# Restrict ptrace to only parent processes
+kernel.yama.ptrace_scope = 1
+
+# Core dump restrictions
+kernel.core_uses_pid = 1
+fs.suid_dumpable = 0
+
+# Restrict kernel performance events to root
+kernel.perf_event_paranoid = 3
+
+###############################################################################
+# File System Security
+###############################################################################
+
+# Protect hardlinks and symlinks
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+
+# Protect FIFOs and regular files
+fs.protected_fifos = 2
+fs.protected_regular = 2
+
+###############################################################################
+# Memory and Resource Limits
+###############################################################################
+
+# Increase inotify limits (for file watching)
+fs.inotify.max_user_watches = {{ inotify_max_watches }}
+fs.inotify.max_user_instances = {{ inotify_max_instances }}
+
+# Virtual memory tuning
+vm.swappiness = {{ swappiness }}
+vm.vfs_cache_pressure = {{ vfs_cache_pressure }}
+vm.dirty_ratio = 10
+vm.dirty_background_ratio = 5
+
+# Disable magic SysRq key (unless you need it for debugging)
+kernel.sysrq = {{ sysrq }}
+
+# Restrict BPF JIT compiler (security vs performance trade-off)
+net.core.bpf_jit_harden = 2
+
+###############################################################################
+# Network Performance & Buffer Tuning
+###############################################################################
+
+# Increase network buffer sizes
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.core.rmem_default = 262144
+net.core.wmem_default = 262144
+net.core.optmem_max = 65536
+net.ipv4.tcp_rmem = 4096 87380 16777216
+net.ipv4.tcp_wmem = 4096 65536 16777216
+
+# Increase connection tracking table size
+net.netfilter.nf_conntrack_max = {{ conntrack_max }}
+
+# TCP window scaling
+net.ipv4.tcp_window_scaling = 1
+
+# Enable TCP fast open
+net.ipv4.tcp_fastopen = 3
+```
+
+**Struktur:**
+```
+salt/basic_server_setup/
+├── sysctl_hardening.sls
+└── files/
+    └── sysctl-hardening.conf.j2

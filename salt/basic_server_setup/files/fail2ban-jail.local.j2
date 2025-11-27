@@ -1,0 +1,18 @@
+# Managed by Salt - DO NOT EDIT MANUALLY
+[DEFAULT]
+# Ban settings
+bantime = {{ bantime }}
+findtime = {{ findtime }}
+maxretry = {{ maxretry }}
+
+# Backend
+backend = systemd
+
+# Email notifications (optional)
+{% if email %}
+destemail = {{ email }}
+sender = fail2ban@{{ hostname }}
+action = %(action_mwl)s
+{% else %}
+action = %(action_)s
+{% endif %}

@@ -1,0 +1,85 @@
+# Managed by Salt - DO NOT EDIT MANUALLY
+# Delete all existing rules
+-D
+
+# Buffer Size (increase if you experience lost events)
+-b 8192
+
+# Failure Mode (0=silent 1=printk 2=panic)
+-f 1
+
+## Audit the audit logs
+-w /var/log/audit/ -k auditlog
+
+## Auditd configuration
+-w /etc/audit/ -p wa -k auditconfig
+-w /etc/libaudit.conf -p wa -k auditconfig
+-w /etc/audisp/ -p wa -k audispconfig
+
+## Monitor for use of audit management tools
+-w /sbin/auditctl -p x -k audittools
+-w /sbin/auditd -p x -k audittools
+
+## System calls - File operations
+-a always,exit -F arch=b64 -S open,openat,creat -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S open,openat,creat -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+
+## Unauthorized access attempts to files
+-a always,exit -F arch=b64 -S open,creat,truncate,ftruncate,openat -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S open,creat,truncate,ftruncate,openat -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+
+## Monitor user/group modifications
+-w /etc/group -p wa -k identity
+-w /etc/passwd -p wa -k identity
+-w /etc/gshadow -p wa -k identity
+-w /etc/shadow -p wa -k identity
+-w /etc/security/opasswd -p wa -k identity
+
+## Monitor sudo configuration
+-w /etc/sudoers -p wa -k sudo_config
+-w /etc/sudoers.d/ -p wa -k sudo_config
+
+## SSH configuration
+-w /etc/ssh/sshd_config -p wa -k sshd_config
+
+## Network configuration
+-a always,exit -F arch=b64 -S sethostname,setdomainname -k network_modifications
+-w /etc/network/ -p wa -k network
+-w /etc/hosts -p wa -k network
+-w /etc/hostname -p wa -k network
+
+## System startup scripts
+-w /etc/rc.d/init.d/ -p wa -k init
+-w /etc/init.d/ -p wa -k init
+-w /etc/systemd/ -p wa -k systemd
+
+## Kernel modules
+-w /sbin/insmod -p x -k modules
+-w /sbin/rmmod -p x -k modules
+-w /sbin/modprobe -p x -k modules
+-a always,exit -F arch=b64 -S init_module,delete_module -k modules
+
+## Login monitoring
+-w /var/log/lastlog -p wa -k logins
+-w /var/run/faillock/ -p wa -k logins
+
+## Session monitoring
+-w /var/run/utmp -p wa -k session
+-w /var/log/wtmp -p wa -k logins
+-w /var/log/btmp -p wa -k logins
+
+## Discretionary Access Control (DAC) modifications
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+## Process execution
+-a always,exit -F arch=b64 -S execve -k exec
+
+## Privilege escalation
+-a always,exit -F arch=b64 -S setuid -F a0=0 -F exe=/usr/bin/su -k priv_esc
+-a always,exit -F arch=b64 -S setresuid -F a0=0 -F exe=/usr/bin/sudo -k priv_esc
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid
+
+## Make the configuration immutable
+-e 2

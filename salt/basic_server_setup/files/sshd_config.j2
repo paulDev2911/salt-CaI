@@ -1,0 +1,60 @@
+# Managed by Salt - DO NOT EDIT MANUALLY
+# Include additional configurations
+Include /etc/ssh/sshd_config.d/*.conf
+
+Protocol 2
+Port {{ ssh_port }}
+{% if ssh_listen_address %}
+ListenAddress {{ ssh_listen_address }}
+{% endif %}
+
+# Authentication
+PermitRootLogin {{ permit_root_login }}
+MaxAuthTries {{ max_auth_tries }}
+PubkeyAuthentication {{ pubkey_authentication }}
+PasswordAuthentication {{ password_authentication }}
+PermitEmptyPasswords no
+KbdInteractiveAuthentication no
+UsePAM yes
+
+# X11 and Forwarding
+X11Forwarding {{ x11_forwarding }}
+PrintMotd no
+
+# Connection Settings
+ClientAliveInterval {{ client_alive_interval }}
+ClientAliveCountMax {{ client_alive_count_max }}
+LoginGraceTime 30s
+TCPKeepAlive yes
+Compression delayed
+
+# Environment and SFTP
+{% if accept_env %}
+AcceptEnv LANG LC_*
+{% endif %}
+
+{% if enable_sftp %}
+Subsystem sftp /usr/lib/openssh/sftp-server
+{% endif %}
+
+# User Restrictions
+{% if allow_users %}
+AllowUsers {{ allow_users | join(' ') }}
+{% endif %}
+
+# Banner
+{% if enable_banner %}
+Banner {{ banner_path }}
+{% endif %}
+
+# Security Settings
+LogLevel VERBOSE
+PermitUserEnvironment no
+ChallengeResponseAuthentication no
+
+# Cryptographic Settings
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
+
+# Host Keys
+HostKey /etc/ssh/ssh_host_ed25519_key

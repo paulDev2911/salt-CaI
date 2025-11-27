@@ -1,0 +1,34 @@
+# Managed by Salt - DO NOT EDIT MANUALLY
+# Enhanced logging configuration
+
+# Log authentication messages separately
+auth,authpriv.*                 /var/log/auth.log
+
+# Log all kernel messages
+kern.*                          /var/log/kern.log
+
+# Log cron messages
+cron.*                          /var/log/cron.log
+
+# Security and audit logs
+*.warning;auth,authpriv.none    /var/log/syslog
+
+# Separate sudo logs
+:programname, isequal, "sudo"   /var/log/sudo.log
+& stop
+
+# SSH logs
+:programname, isequal, "sshd"   /var/log/ssh.log
+& stop
+
+# UFW firewall logs
+:msg, contains, "[UFW "         /var/log/ufw.log
+& stop
+
+# Log all critical and higher to separate file
+*.crit                          /var/log/critical.log
+
+{% if remote_server %}
+# Forward logs to remote syslog server
+*.* @@{{ remote_server }}:{{ remote_port }}
+{% endif %}
