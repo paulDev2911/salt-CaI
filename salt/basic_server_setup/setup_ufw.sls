@@ -31,33 +31,32 @@ ufw_default_deny_incoming:
   cmd.run:
     - name: ufw default deny incoming
     - unless: ufw status verbose | grep -q "Default: deny (incoming)"
-    {% if grains['os_family'] == 'Debian' %}
+  {% if grains['os_family'] == 'Debian' %}
     - require:
       - pkg: install_ufw
-    {% endif %}
+  {% endif %}
 
 ufw_default_allow_outgoing:
   cmd.run:
     - name: ufw default allow outgoing
     - unless: ufw status verbose | grep -q "Default: allow (outgoing)"
-    {% if grains['os_family'] == 'Debian' %}
+  {% if grains['os_family'] == 'Debian' %}
     - require:
       - pkg: install_ufw
-    {% endif %}
+  {% endif %}
 
 # Step 4: Enable UFW logging
 ufw_enable_logging:
   cmd.run:
     - name: ufw logging on
     - unless: ufw status verbose | grep -q "Logging: on"
-{% if grains['os_family'] == 'Debian' %}
+  {% if grains['os_family'] == 'Debian' %}
     - require:
       - pkg: install_ufw
-{% endif %}
+  {% endif %}
 
 # Step 5: Allow SSH with rate limiting
 {% if 'any' in allowed_ssh_ips %}
-# Allow SSH from any source with rate limiting
 allow_ssh_any:
   cmd.run:
     - name: ufw limit {{ ssh_port }}/tcp comment 'SSH access (rate limited)'
@@ -65,7 +64,6 @@ allow_ssh_any:
     - require:
       - cmd: ufw_default_deny_incoming
 {% else %}
-# Allow SSH only from specific IPs with rate limiting
 {% for ip in allowed_ssh_ips %}
 allow_ssh_from_{{ loop.index }}:
   cmd.run:
@@ -117,13 +115,13 @@ enable_ufw:
     - require:
       - cmd: ufw_default_deny_incoming
       - cmd: ufw_default_allow_outgoing
-{% if 'any' in allowed_ssh_ips %}
+  {% if 'any' in allowed_ssh_ips %}
       - cmd: allow_ssh_any
-{% else %}
-{% for ip in allowed_ssh_ips %}
+  {% else %}
+    {% for ip in allowed_ssh_ips %}
       - cmd: allow_ssh_from_{{ loop.index }}
-{% endfor %}
-{% endif %}
+    {% endfor %}
+  {% endif %}
 
 # Step 10: Ensure UFW service is enabled at boot
 ufw_service:

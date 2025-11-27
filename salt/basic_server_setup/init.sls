@@ -1,6 +1,6 @@
 include:
   - basic_server_setup.users
-#  - basic_server_setup.add_ssh_key
+  - basic_server_setup.add_ssh_key
   - basic_server_setup.install_basic_packages
   - basic_server_setup.ntp_time_sync
   - basic_server_setup.service_hardening
