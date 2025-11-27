@@ -69,34 +69,27 @@ configure_auditd:
       - pkg: install_auditd_packages
 {% endif %}
 
-# Step 5: Enable auditd service (special handling - can't be restarted normally)
-auditd_service:
-  service.enabled:
-    - name: auditd
-    - require:
-      - pkg: install_auditd_packages
-      - file: configure_auditd
-
-# Step 5b: Start auditd if not running (don't restart!)
-start_auditd:
-  cmd.run:
-    - name: systemctl start auditd
-    - unless: systemctl is-active auditd
-    - require:
-      - service: auditd_service
-
-# Step 6: Load audit rules
-load_audit_rules:
+# Step 5: Load audit rules FIRST (before starting service)
+load_audit_rules_initial:
   cmd.run:
     - name: augenrules --load
-    - onchanges:
-      - file: deploy_audit_rules
     - require:
-      - cmd: start_auditd
+      - file: deploy_audit_rules
+      - pkg: install_auditd_packages
+
+# Step 6: Enable and start auditd service
+auditd_service:
+  service.running:
+    - name: auditd
+    - enable: True
+    - reload: False
+    - require:
+      - cmd: load_audit_rules_initial
+      - file: configure_auditd
 
 # Step 7: Get auditd status (for verification)
 get_auditd_status:
   cmd.run:
     - name: auditctl -s
     - require:
-      - cmd: start_auditd
+      - service: auditd_service
