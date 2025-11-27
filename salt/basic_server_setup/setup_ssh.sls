@@ -1,6 +1,3 @@
-# SSH Hardening Configuration
-# Converted from Ansible role: roles/basic_server_setup/tasks/configure_ssh.yml
-
 {% set ssh_port = pillar.get('basic_server_setup:ssh_port', 22) %}
 {% set ssh_listen_address = pillar.get('basic_server_setup:ssh_listen_address', '') %}
 {% set permit_root_login = pillar.get('basic_server_setup:ssh_permit_root_login', 'no') %}
@@ -16,7 +13,6 @@
 {% set enable_banner = pillar.get('basic_server_setup:ssh_enable_banner', False) %}
 {% set banner_path = pillar.get('basic_server_setup:ssh_banner_path', '/etc/ssh/banner.txt') %}
 
-# Step 1: Backup original sshd_config (only if backup doesn't exist)
 backup_sshd_config:
   file.copy:
     - name: /etc/ssh/sshd_config.backup
@@ -27,7 +23,6 @@ backup_sshd_config:
     - group: root
     - mode: '0600'
 
-# Step 2: Deploy hardened sshd_config from template
 configure_sshd:
   file.managed:
     - name: /etc/ssh/sshd_config
@@ -55,14 +50,12 @@ configure_sshd:
     - require:
       - file: backup_sshd_config
 
-# Step 3: Validate sshd_config before applying
 validate_sshd_config:
   cmd.run:
     - name: /usr/sbin/sshd -t -f /etc/ssh/sshd_config
     - onchanges:
       - file: configure_sshd
 
-# Step 4: Deploy SSH banner (optional, controlled by pillar)
 {% if enable_banner %}
 deploy_ssh_banner:
   file.managed:
@@ -74,7 +67,6 @@ deploy_ssh_banner:
     - mode: '0644'
 {% endif %}
 
-# Step 5: Ensure SSH service is enabled and started
 ssh_service:
   service.running:
     - name: ssh

@@ -1,6 +1,3 @@
-# Sysctl Kernel Hardening
-# Converted from Ansible role: roles/basic_server_setup/tasks/harden_sysctl.yml
-
 {% set ip_forward = pillar.get('basic_server_setup:sysctl_ip_forward', 0) %}
 {% set ipv6_forwarding = pillar.get('basic_server_setup:sysctl_ipv6_forwarding', 0) %}
 {% set ignore_ping = pillar.get('basic_server_setup:sysctl_ignore_ping', 0) %}
@@ -11,7 +8,6 @@
 {% set conntrack_max = pillar.get('basic_server_setup:sysctl_conntrack_max', 262144) %}
 {% set sysrq = pillar.get('basic_server_setup:sysctl_sysrq', 0) %}
 
-# Step 1: Backup original sysctl.conf (only if it exists)
 backup_sysctl_conf:
   file.copy:
     - name: /etc/sysctl.conf.backup
@@ -23,7 +19,6 @@ backup_sysctl_conf:
     - mode: '0644'
     - onlyif: test -f /etc/sysctl.conf
 
-# Step 2: Deploy hardened sysctl configuration from template
 sysctl_hardening_config:
   file.managed:
     - name: /etc/sysctl.d/99-hardening.conf
@@ -44,14 +39,12 @@ sysctl_hardening_config:
         conntrack_max: {{ conntrack_max }}
         sysrq: {{ sysrq }}
 
-# Step 3: Apply sysctl settings immediately
 apply_sysctl_hardening:
   cmd.run:
     - name: sysctl -p /etc/sysctl.d/99-hardening.conf
     - onchanges:
       - file: sysctl_hardening_config
 
-# Step 4: Verify critical sysctl settings
 {% set critical_sysctls = [
     'net.ipv4.ip_forward',
     'net.ipv4.conf.all.accept_source_route',

@@ -1,4 +1,3 @@
-# Best Practice: Kombinierte Version
 {% if grains['os_family'] == 'Debian' %}
 update_and_upgrade_system:
   pkg.uptodate:
@@ -14,7 +13,6 @@ cleanup_packages:
     - onchanges:
       - pkg: update_and_upgrade_system
 
-# Reboot handling based on pillar setting
 {% if pillar.get('basic_server_setup:allow_reboot', False) %}
 reboot_if_required:
   system.reboot:
