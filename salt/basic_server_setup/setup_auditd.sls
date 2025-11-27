@@ -36,7 +36,7 @@ auditd_rules_directory:
 deploy_audit_rules:
   file.managed:
     - name: /etc/audit/rules.d/custom.rules
-    - source: salt://basic_server_setup/files/auditd-rules.j2
+    - source: salt://basic_server_setup/files/auditd_rules.j2
     - template: jinja
     - user: root
     - group: root
@@ -69,23 +69,24 @@ configure_auditd:
       - pkg: install_auditd_packages
 {% endif %}
 
-# Step 5: Load audit rules FIRST (before starting service)
-load_audit_rules_initial:
-  cmd.run:
-    - name: augenrules --load
-    - require:
-      - file: deploy_audit_rules
-      - pkg: install_auditd_packages
-
-# Step 6: Enable and start auditd service
+# Step 5: Enable and start auditd service (loads rules automatically)
 auditd_service:
   service.running:
     - name: auditd
     - enable: True
-    - reload: False
     - require:
-      - cmd: load_audit_rules_initial
+      - pkg: install_auditd_packages
+      - file: deploy_audit_rules
       - file: configure_auditd
+
+# Step 6: Reload audit rules if they changed
+reload_audit_rules:
+  cmd.run:
+    - name: service auditd restart
+    - onchanges:
+      - file: deploy_audit_rules
+    - require:
+      - service: auditd_service
 
 # Step 7: Get auditd status (for verification)
 get_auditd_status:
