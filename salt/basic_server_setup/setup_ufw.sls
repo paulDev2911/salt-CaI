@@ -31,19 +31,19 @@ ufw_default_deny_incoming:
   cmd.run:
     - name: ufw default deny incoming
     - unless: ufw status verbose | grep -q "Default: deny (incoming)"
-{% if grains['os_family'] == 'Debian' %}
+    {% if grains['os_family'] == 'Debian' %}
     - require:
       - pkg: install_ufw
-{% endif %}
+    {% endif %}
 
 ufw_default_allow_outgoing:
   cmd.run:
     - name: ufw default allow outgoing
     - unless: ufw status verbose | grep -q "Default: allow (outgoing)"
-{% if grains['os_family'] == 'Debian' %}
+    {% if grains['os_family'] == 'Debian' %}
     - require:
       - pkg: install_ufw
-{% endif %}
+    {% endif %}
 
 # Step 4: Enable UFW logging
 ufw_enable_logging:
