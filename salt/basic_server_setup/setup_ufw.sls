@@ -20,10 +20,10 @@ install_ufw:
 reset_ufw:
   cmd.run:
     - name: echo "y" | ufw --force reset
-{% if grains['os_family'] == 'Debian' %}
+  {% if grains['os_family'] == 'Debian' %}
     - require:
       - pkg: install_ufw
-{% endif %}
+  {% endif %}
 {% endif %}
 
 # Step 3: Set default UFW policies
