@@ -1,0 +1,64 @@
+#!/usr/sbin/nft -f
+# Managed by Salt - DO NOT EDIT MANUALLY
+# nftables firewall configuration
+
+# Flush existing rules
+flush ruleset
+
+# Define variables
+define SSH_PORT = {{ ssh_port }}
+
+# Main filter table
+table inet filter {
+    # Rate limiting for SSH
+    set ssh_ratelimit {
+        type ipv4_addr
+        size 65536
+        flags dynamic,timeout
+        timeout 10m
+    }
+
+    # Input chain - incoming traffic
+    chain input {
+        type filter hook input priority filter; policy drop;
+
+        # Accept all loopback traffic
+        iif lo accept
+
+        # Accept established/related connections
+        ct state established,related accept
+
+        # Drop invalid packets
+        ct state invalid drop
+
+        # Accept ICMP (ping)
+        ip protocol icmp icmp type { echo-request, echo-reply } limit rate 5/second accept
+        ip6 nexthdr ipv6-icmp icmpv6 type { echo-request, echo-reply } limit rate 5/second accept
+
+        # SSH with rate limiting (max 5 connections per minute per IP)
+        tcp dport $SSH_PORT ct state new add @ssh_ratelimit { ip saddr limit rate 5/minute } accept
+        tcp dport $SSH_PORT ct state new log prefix "SSH RATE LIMIT: " drop
+
+        {% for port in allowed_ports %}
+        {% if port != ssh_port ~ '/tcp' %}
+        {% set port_number = port.split('/')[0] %}
+        {% set port_proto = port.split('/')[1] %}
+        # Allow {{ port }}
+        {{ port_proto }} dport {{ port_number }} accept
+        {% endif %}
+        {% endfor %}
+
+        # Log dropped packets (optional - comment out if too noisy)
+        # log prefix "INPUT DROP: " drop
+    }
+
+    # Forward chain - routed traffic
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+    }
+
+    # Output chain - outgoing traffic
+    chain output {
+        type filter hook output priority filter; policy accept;
+    }
+}
