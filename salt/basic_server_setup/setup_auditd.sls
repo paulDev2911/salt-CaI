@@ -69,18 +69,21 @@ configure_auditd:
       - pkg: install_auditd_packages
 {% endif %}
 
-# Step 5: Enable and start auditd service
+# Step 5: Enable auditd service (special handling - can't be restarted normally)
 auditd_service:
-  service.running:
+  service.enabled:
     - name: auditd
-    - enable: True
-    - watch:
-      - file: deploy_audit_rules
-      - file: configure_auditd
-{% if grains['os_family'] == 'Debian' %}
     - require:
       - pkg: install_auditd_packages
-{% endif %}
+      - file: configure_auditd
+
+# Step 5b: Start auditd if not running (don't restart!)
+start_auditd:
+  cmd.run:
+    - name: systemctl start auditd
+    - unless: systemctl is-active auditd
+    - require:
+      - service: auditd_service
 
 # Step 6: Load audit rules
 load_audit_rules:
@@ -89,12 +92,11 @@ load_audit_rules:
     - onchanges:
       - file: deploy_audit_rules
     - require:
-      - service: auditd_service
+      - cmd: start_auditd
 
 # Step 7: Get auditd status (for verification)
 get_auditd_status:
   cmd.run:
     - name: auditctl -s
     - require:
-      - service: auditd_service
-      - cmd: load_audit_rules
+      - cmd: start_auditd
