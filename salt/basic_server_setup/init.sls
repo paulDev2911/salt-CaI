@@ -1,2 +1,16 @@
 include:
   - basic_server_setup.users
+  - basic_server_setup.add_ssh_key
+  - basic_server_setup.install_basic_packages
+  - basic_server_setup.ntp_time_sync
+  - basic_server_setup.service_hardening
+  - basic_server_setup.set_hostname
+  - basic_server_setup.setup_auditd
+  - basic_server_setup.setup_fail2ban
+  - basic_server_setup.setup_logging
+  - basic_server_setup.setup_ssh
+  - basic_server_setup.setup_sudo
+  - basic_server_setup.setup_ufw
+  - basic_server_setup.sysctl_hardening
+  - basic_server_setup.unattended_services
+  - basic_server_setup.update_upgrade
