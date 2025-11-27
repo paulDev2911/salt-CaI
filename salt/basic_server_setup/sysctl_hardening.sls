@@ -11,7 +11,7 @@
 {% set conntrack_max = pillar.get('basic_server_setup:sysctl_conntrack_max', 262144) %}
 {% set sysrq = pillar.get('basic_server_setup:sysctl_sysrq', 0) %}
 
-# Step 1: Backup original sysctl.conf (only if backup doesn't exist)
+# Step 1: Backup original sysctl.conf (only if it exists)
 backup_sysctl_conf:
   file.copy:
     - name: /etc/sysctl.conf.backup
@@ -21,6 +21,7 @@ backup_sysctl_conf:
     - user: root
     - group: root
     - mode: '0644'
+    - onlyif: test -f /etc/sysctl.conf
 
 # Step 2: Deploy hardened sysctl configuration from template
 sysctl_hardening_config:
@@ -42,8 +43,6 @@ sysctl_hardening_config:
         inotify_max_instances: {{ inotify_max_instances }}
         conntrack_max: {{ conntrack_max }}
         sysrq: {{ sysrq }}
-    - require:
-      - file: backup_sysctl_conf
 
 # Step 3: Apply sysctl settings immediately
 apply_sysctl_hardening:

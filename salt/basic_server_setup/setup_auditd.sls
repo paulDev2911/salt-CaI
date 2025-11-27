@@ -36,7 +36,7 @@ auditd_rules_directory:
 deploy_audit_rules:
   file.managed:
     - name: /etc/audit/rules.d/custom.rules
-    - source: salt://basic_server_setup/files/audit-rules.j2
+    - source: salt://basic_server_setup/files/auditd-rules.j2
     - template: jinja
     - user: root
     - group: root
