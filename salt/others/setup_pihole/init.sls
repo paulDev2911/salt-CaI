@@ -102,4 +102,3 @@ pihole-service:
       - file: /etc/systemd/system/pihole.service
     - watch:
       - file: /opt/pihole/docker-compose.yml
-{% endif %}
