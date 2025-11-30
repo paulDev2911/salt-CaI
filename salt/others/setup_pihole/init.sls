@@ -1,4 +1,8 @@
-{% set pihole_config = salt['pillar.get']('/others/pihole', {}) %}
+include:
+  - roles.basic_server_setup
+  - roles.setup_docker
+
+{% set pihole_config = salt['pillar.get']('pihole', {}) %}
 {% set timezone = pihole_config.get('timezone', 'Europe/Berlin') %}
 {% set webpassword = pihole_config.get('webpassword', '') %}
 {% set dns1 = pihole_config.get('dns1', '1.1.1.1') %}
