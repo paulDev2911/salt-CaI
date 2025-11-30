@@ -22,7 +22,7 @@ backup_sysctl_conf:
 sysctl_hardening_config:
   file.managed:
     - name: /etc/sysctl.d/99-hardening.conf
-    - source: salt://basic_server_setup/files/sysctl-hardening.conf.j2
+    - source: salt://roles/basic_server_setup/files/sysctl-hardening.conf.j2
     - template: jinja
     - user: root
     - group: root

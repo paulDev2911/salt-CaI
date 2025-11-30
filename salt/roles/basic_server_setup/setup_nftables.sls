@@ -19,7 +19,7 @@ remove_ufw:
 deploy_nftables_config:
   file.managed:
     - name: /etc/nftables.conf
-    - source: salt://basic_server_setup/files/nftables.conf.j2
+    - source: salt://roles/basic_server_setup/files/nftables.conf.j2
     - template: jinja
     - user: root
     - group: root

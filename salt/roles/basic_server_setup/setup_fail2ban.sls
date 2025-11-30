@@ -25,7 +25,7 @@ fail2ban_jail_directory:
 fail2ban_default_config:
   file.managed:
     - name: /etc/fail2ban/jail.d/custom.local
-    - source: salt://basic_server_setup/files/fail2ban-jail.local.j2
+    - source: salt://roles/basic_server_setup/files/fail2ban-jail.local.j2
     - template: jinja
     - user: root
     - group: root
@@ -43,7 +43,7 @@ fail2ban_default_config:
 fail2ban_sshd_config:
   file.managed:
     - name: /etc/fail2ban/jail.d/sshd.local
-    - source: salt://basic_server_setup/files/fail2ban-sshd.local.j2
+    - source: salt://roles/basic_server_setup/files/fail2ban-sshd.local.j2
     - template: jinja
     - user: root
     - group: root

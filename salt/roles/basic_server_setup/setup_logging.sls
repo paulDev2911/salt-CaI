@@ -12,7 +12,7 @@ install_rsyslog:
 configure_rsyslog_hardening:
   file.managed:
     - name: /etc/rsyslog.d/50-hardening.conf
-    - source: salt://basic_server_setup/files/rsyslog-hardening.conf.j2
+    - source: salt://roles/basic_server_setup/files/rsyslog-hardening.conf.j2
     - template: jinja
     - user: root
     - group: root
@@ -29,7 +29,7 @@ configure_rsyslog_hardening:
 configure_logrotate_security:
   file.managed:
     - name: /etc/logrotate.d/security
-    - source: salt://basic_server_setup/files/logrotate-security.j2
+    - source: salt://roles/basic_server_setup/files/logrotate-security.j2
     - template: jinja
     - user: root
     - group: root

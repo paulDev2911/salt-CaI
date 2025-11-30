@@ -26,7 +26,7 @@ backup_sshd_config:
 configure_sshd:
   file.managed:
     - name: /etc/ssh/sshd_config
-    - source: salt://basic_server_setup/files/sshd_config.j2
+    - source: salt://roles/basic_server_setup/files/sshd_config.j2
     - template: jinja
     - user: root
     - group: root
@@ -60,7 +60,7 @@ validate_sshd_config:
 deploy_ssh_banner:
   file.managed:
     - name: {{ banner_path }}
-    - source: salt://basic_server_setup/files/ssh_banner.j2
+    - source: salt://roles/basic_server_setup/files/ssh_banner.j2
     - template: jinja
     - user: root
     - group: root
