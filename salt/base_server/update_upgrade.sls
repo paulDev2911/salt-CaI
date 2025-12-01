@@ -13,7 +13,7 @@ cleanup_packages:
     - onchanges:
       - pkg: update_and_upgrade_system
 
-{% if pillar.get('basic_server_setup:allow_reboot', False) %}
+{% if pillar.get('base_server:allow_reboot', False) %}
 reboot_if_required:
   system.reboot:
     - onlyif: test -f /var/run/reboot-required

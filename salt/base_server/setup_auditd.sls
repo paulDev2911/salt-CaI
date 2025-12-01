@@ -1,11 +1,11 @@
-{% set max_log_file = pillar.get('basic_server_setup:auditd_max_log_file', 8) %}
-{% set max_log_file_action = pillar.get('basic_server_setup:auditd_max_log_file_action', 'ROTATE') %}
-{% set space_left = pillar.get('basic_server_setup:auditd_space_left', 75) %}
-{% set space_left_action = pillar.get('basic_server_setup:auditd_space_left_action', 'SYSLOG') %}
-{% set admin_space_left = pillar.get('basic_server_setup:auditd_admin_space_left', 50) %}
-{% set admin_space_left_action = pillar.get('basic_server_setup:auditd_admin_space_left_action', 'SUSPEND') %}
-{% set disk_full_action = pillar.get('basic_server_setup:auditd_disk_full_action', 'SUSPEND') %}
-{% set disk_error_action = pillar.get('basic_server_setup:auditd_disk_error_action', 'SUSPEND') %}
+{% set max_log_file = pillar.get('base_server:auditd_max_log_file', 8) %}
+{% set max_log_file_action = pillar.get('base_server:auditd_max_log_file_action', 'ROTATE') %}
+{% set space_left = pillar.get('base_server:auditd_space_left', 75) %}
+{% set space_left_action = pillar.get('base_server:auditd_space_left_action', 'SYSLOG') %}
+{% set admin_space_left = pillar.get('base_server:auditd_admin_space_left', 50) %}
+{% set admin_space_left_action = pillar.get('base_server:auditd_admin_space_left_action', 'SUSPEND') %}
+{% set disk_full_action = pillar.get('base_server:auditd_disk_full_action', 'SUSPEND') %}
+{% set disk_error_action = pillar.get('base_server:auditd_disk_error_action', 'SUSPEND') %}
 
 {% if grains['os_family'] == 'Debian' %}
 install_auditd_packages:
@@ -30,7 +30,7 @@ auditd_rules_directory:
 deploy_audit_rules:
   file.managed:
     - name: /etc/audit/rules.d/custom.rules
-    - source: salt://roles/basic_server_setup/files/auditd_rules.j2
+    - source: salt://base_server/files/auditd_rules.j2
     - template: jinja
     - user: root
     - group: root
@@ -42,7 +42,7 @@ deploy_audit_rules:
 configure_auditd:
   file.managed:
     - name: /etc/audit/auditd.conf
-    - source: salt://roltes/basic_server_setup/files/auditd.conf.j2
+    - source: salt://base_server/files/auditd.conf.j2
     - template: jinja
     - user: root
     - group: root

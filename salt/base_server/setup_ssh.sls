@@ -1,17 +1,17 @@
-{% set ssh_port = pillar.get('basic_server_setup:ssh_port', 22) %}
-{% set ssh_listen_address = pillar.get('basic_server_setup:ssh_listen_address', '') %}
-{% set permit_root_login = pillar.get('basic_server_setup:ssh_permit_root_login', 'no') %}
-{% set max_auth_tries = pillar.get('basic_server_setup:ssh_max_auth_tries', 3) %}
-{% set pubkey_authentication = pillar.get('basic_server_setup:ssh_pubkey_authentication', 'yes') %}
-{% set password_authentication = pillar.get('basic_server_setup:ssh_password_authentication', 'no') %}
-{% set x11_forwarding = pillar.get('basic_server_setup:ssh_x11_forwarding', 'no') %}
-{% set client_alive_interval = pillar.get('basic_server_setup:ssh_client_alive_interval', 300) %}
-{% set client_alive_count_max = pillar.get('basic_server_setup:ssh_client_alive_count_max', 3) %}
-{% set accept_env = pillar.get('basic_server_setup:ssh_accept_env', True) %}
-{% set enable_sftp = pillar.get('basic_server_setup:ssh_enable_sftp', True) %}
-{% set allow_users = pillar.get('basic_server_setup:ssh_allow_users', ['ansible', 'sysadmin']) %}
-{% set enable_banner = pillar.get('basic_server_setup:ssh_enable_banner', False) %}
-{% set banner_path = pillar.get('basic_server_setup:ssh_banner_path', '/etc/ssh/banner.txt') %}
+{% set ssh_port = pillar.get('base_server:ssh_port', 22) %}
+{% set ssh_listen_address = pillar.get('base_server:ssh_listen_address', '') %}
+{% set permit_root_login = pillar.get('base_server:ssh_permit_root_login', 'no') %}
+{% set max_auth_tries = pillar.get('base_server:ssh_max_auth_tries', 3) %}
+{% set pubkey_authentication = pillar.get('base_server:ssh_pubkey_authentication', 'yes') %}
+{% set password_authentication = pillar.get('base_server:ssh_password_authentication', 'no') %}
+{% set x11_forwarding = pillar.get('base_server:ssh_x11_forwarding', 'no') %}
+{% set client_alive_interval = pillar.get('base_server:ssh_client_alive_interval', 300) %}
+{% set client_alive_count_max = pillar.get('base_server:ssh_client_alive_count_max', 3) %}
+{% set accept_env = pillar.get('base_server:ssh_accept_env', True) %}
+{% set enable_sftp = pillar.get('base_server:ssh_enable_sftp', True) %}
+{% set allow_users = pillar.get('base_server:ssh_allow_users', ['ansible', 'sysadmin']) %}
+{% set enable_banner = pillar.get('base_server:ssh_enable_banner', False) %}
+{% set banner_path = pillar.get('base_server:ssh_banner_path', '/etc/ssh/banner.txt') %}
 
 backup_sshd_config:
   file.copy:
@@ -26,7 +26,7 @@ backup_sshd_config:
 configure_sshd:
   file.managed:
     - name: /etc/ssh/sshd_config
-    - source: salt://roles/basic_server_setup/files/sshd_config.j2
+    - source: salt://base_server/files/sshd_config.j2
     - template: jinja
     - user: root
     - group: root
@@ -60,7 +60,7 @@ validate_sshd_config:
 deploy_ssh_banner:
   file.managed:
     - name: {{ banner_path }}
-    - source: salt://roles/basic_server_setup/files/ssh_banner.j2
+    - source: salt://base_server/files/ssh_banner.j2
     - template: jinja
     - user: root
     - group: root

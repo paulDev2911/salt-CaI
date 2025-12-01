@@ -1,5 +1,5 @@
-{% set ssh_port = pillar.get('basic_server_setup:ssh_port', 22) %}
-{% set allowed_ports = pillar.get('basic_server_setup:allowed_ports', ['22/tcp']) %}
+{% set ssh_port = pillar.get('base_server:ssh_port', 22) %}
+{% set allowed_ports = pillar.get('base_server:allowed_ports', ['22/tcp']) %}
 
 install_nftables:
   pkg.installed:
@@ -19,7 +19,7 @@ remove_ufw:
 deploy_nftables_config:
   file.managed:
     - name: /etc/nftables.conf
-    - source: salt://roles/basic_server_setup/files/nftables.conf.j2
+    - source: salt://base_server/files/nftables.conf.j2
     - template: jinja
     - user: root
     - group: root

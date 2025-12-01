@@ -1,6 +1,6 @@
-{% set hostname = pillar.get('basic_server_setup:hostname', grains['id']) %}
+{% set hostname = pillar.get('base_server:hostname', grains['id']) %}
 
-{% if pillar.get('roles.basic_server_setup:hostname') %}
+{% if pillar.get('roles.base_server:hostname') %}
 
 set_hostname:
   network.system:
@@ -11,7 +11,7 @@ set_hostname:
 configure_hosts_file:
   file.managed:
     - name: /etc/hosts
-    - source: salt://roles/basic_server_setup/files/hosts.j2
+    - source: salt://base_server/files/hosts.j2
     - template: jinja
     - user: root
     - group: root

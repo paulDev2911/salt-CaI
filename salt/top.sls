@@ -1,5 +1,11 @@
 base:
   '*':
-    - roles.basic_server_setup
-  'prod-*':
-    - production.prod-authentik
+    - base_server
+    
+  'pihole-*':
+    - docker
+    - pihole
+
+  'prod-authentik':
+    - docker
+    - authentik

@@ -1,8 +1,8 @@
-{% set ssh_port = pillar.get('basic_server_setup:ssh_port', 22) %}
-{% set bantime = pillar.get('basic_server_setup:fail2ban_bantime', '1h') %}
-{% set findtime = pillar.get('basic_server_setup:fail2ban_findtime', '10m') %}
-{% set maxretry = pillar.get('basic_server_setup:fail2ban_maxretry', 5) %}
-{% set email = pillar.get('basic_server_setup:fail2ban_email', '') %}
+{% set ssh_port = pillar.get('base_server:ssh_port', 22) %}
+{% set bantime = pillar.get('base_server:fail2ban_bantime', '1h') %}
+{% set findtime = pillar.get('base_server:fail2ban_findtime', '10m') %}
+{% set maxretry = pillar.get('base_server:fail2ban_maxretry', 5) %}
+{% set email = pillar.get('base_server:fail2ban_email', '') %}
 
 {% if grains['os_family'] == 'Debian' %}
 install_fail2ban:
@@ -25,7 +25,7 @@ fail2ban_jail_directory:
 fail2ban_default_config:
   file.managed:
     - name: /etc/fail2ban/jail.d/custom.local
-    - source: salt://roles/basic_server_setup/files/fail2ban-jail.local.j2
+    - source: salt://base_server/files/fail2ban-jail.local.j2
     - template: jinja
     - user: root
     - group: root
@@ -43,7 +43,7 @@ fail2ban_default_config:
 fail2ban_sshd_config:
   file.managed:
     - name: /etc/fail2ban/jail.d/sshd.local
-    - source: salt://roles/basic_server_setup/files/fail2ban-sshd.local.j2
+    - source: salt://base_server/files/fail2ban-sshd.local.j2
     - template: jinja
     - user: root
     - group: root

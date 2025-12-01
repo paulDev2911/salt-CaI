@@ -1,7 +1,7 @@
-{% set journald_max_use = pillar.get('basic_server_setup:journald_max_use', '500M') %}
-{% set journald_retention = pillar.get('basic_server_setup:journald_retention', '1month') %}
-{% set remote_server = pillar.get('basic_server_setup:rsyslog_remote_server', '') %}
-{% set remote_port = pillar.get('basic_server_setup:rsyslog_remote_port', 514) %}
+{% set journald_max_use = pillar.get('base_server:journald_max_use', '500M') %}
+{% set journald_retention = pillar.get('base_server:journald_retention', '1month') %}
+{% set remote_server = pillar.get('base_server:rsyslog_remote_server', '') %}
+{% set remote_port = pillar.get('base_server:rsyslog_remote_port', 514) %}
 
 {% if grains['os_family'] == 'Debian' %}
 install_rsyslog:
@@ -12,7 +12,7 @@ install_rsyslog:
 configure_rsyslog_hardening:
   file.managed:
     - name: /etc/rsyslog.d/50-hardening.conf
-    - source: salt://roles/basic_server_setup/files/rsyslog-hardening.conf.j2
+    - source: salt://base_server/files/rsyslog-hardening.conf.j2
     - template: jinja
     - user: root
     - group: root
@@ -29,7 +29,7 @@ configure_rsyslog_hardening:
 configure_logrotate_security:
   file.managed:
     - name: /etc/logrotate.d/security
-    - source: salt://roles/basic_server_setup/files/logrotate-security.j2
+    - source: salt://base_server/files/logrotate-security.j2
     - template: jinja
     - user: root
     - group: root

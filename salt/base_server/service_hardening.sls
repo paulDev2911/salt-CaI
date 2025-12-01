@@ -1,5 +1,5 @@
-{% set disable_ipv6 = pillar.get('basic_server_setup:disable_ipv6', False) %}
-{% set remove_packages = pillar.get('basic_server_setup:remove_packages_enabled', False) %}
+{% set disable_ipv6 = pillar.get('base_server:disable_ipv6', False) %}
+{% set remove_packages = pillar.get('base_server:remove_packages_enabled', False) %}
 
 {% set services_to_disable = [
     'avahi-daemon',

@@ -1,5 +1,5 @@
-{% set timezone = pillar.get('basic_server_setup:timezone', 'Europe/Berlin') %}
-{% set ntp_servers = pillar.get('basic_server_setup:ntp_servers', '0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org') %}
+{% set timezone = pillar.get('base_server:timezone', 'Europe/Berlin') %}
+{% set ntp_servers = pillar.get('base_server:ntp_servers', '0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org') %}
 
 set_timezone:
   timezone.system:

@@ -1,7 +1,7 @@
-{% set auto_reboot = pillar.get('basic_server_setup:unattended_upgrades_automatic_reboot', False) %}
-{% set reboot_time = pillar.get('basic_server_setup:unattended_upgrades_automatic_reboot_time', '03:00') %}
-{% set email = pillar.get('basic_server_setup:unattended_upgrades_mail', '') %}
-{% set dry_run = pillar.get('basic_server_setup:unattended_upgrades_dry_run', False) %}
+{% set auto_reboot = pillar.get('base_server:unattended_upgrades_automatic_reboot', False) %}
+{% set reboot_time = pillar.get('base_server:unattended_upgrades_automatic_reboot_time', '03:00') %}
+{% set email = pillar.get('base_server:unattended_upgrades_mail', '') %}
+{% set dry_run = pillar.get('base_server:unattended_upgrades_dry_run', False) %}
 
 {% if grains['os_family'] == 'Debian' %}
 install_unattended_upgrades:

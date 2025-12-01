@@ -1,4 +1,4 @@
-{% set sysadmin_password_hash = pillar.get('basic_server_setup:sysadmin_password_hash', '$6$rounds=656000$YourHashedPasswordHere$ExampleHash') %}
+{% set sysadmin_password_hash = pillar.get('base_server:sysadmin_password_hash', '$6$rounds=656000$YourHashedPasswordHere$ExampleHash') %}
 
 sysadmin_user:
   user.present:

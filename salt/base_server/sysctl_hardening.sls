@@ -1,12 +1,12 @@
-{% set ip_forward = pillar.get('basic_server_setup:sysctl_ip_forward', 0) %}
-{% set ipv6_forwarding = pillar.get('basic_server_setup:sysctl_ipv6_forwarding', 0) %}
-{% set ignore_ping = pillar.get('basic_server_setup:sysctl_ignore_ping', 0) %}
-{% set swappiness = pillar.get('basic_server_setup:sysctl_swappiness', 10) %}
-{% set vfs_cache_pressure = pillar.get('basic_server_setup:sysctl_vfs_cache_pressure', 50) %}
-{% set inotify_max_watches = pillar.get('basic_server_setup:sysctl_inotify_max_watches', 524288) %}
-{% set inotify_max_instances = pillar.get('basic_server_setup:sysctl_inotify_max_instances', 512) %}
-{% set conntrack_max = pillar.get('basic_server_setup:sysctl_conntrack_max', 262144) %}
-{% set sysrq = pillar.get('basic_server_setup:sysctl_sysrq', 0) %}
+{% set ip_forward = pillar.get('base_server:sysctl_ip_forward', 0) %}
+{% set ipv6_forwarding = pillar.get('base_server:sysctl_ipv6_forwarding', 0) %}
+{% set ignore_ping = pillar.get('base_server:sysctl_ignore_ping', 0) %}
+{% set swappiness = pillar.get('base_server:sysctl_swappiness', 10) %}
+{% set vfs_cache_pressure = pillar.get('base_server:sysctl_vfs_cache_pressure', 50) %}
+{% set inotify_max_watches = pillar.get('base_server:sysctl_inotify_max_watches', 524288) %}
+{% set inotify_max_instances = pillar.get('base_server:sysctl_inotify_max_instances', 512) %}
+{% set conntrack_max = pillar.get('base_server:sysctl_conntrack_max', 262144) %}
+{% set sysrq = pillar.get('base_server:sysctl_sysrq', 0) %}
 
 backup_sysctl_conf:
   file.copy:
@@ -22,7 +22,7 @@ backup_sysctl_conf:
 sysctl_hardening_config:
   file.managed:
     - name: /etc/sysctl.d/99-hardening.conf
-    - source: salt://roles/basic_server_setup/files/sysctl-hardening.conf.j2
+    - source: salt://base_server/files/sysctl-hardening.conf.j2
     - template: jinja
     - user: root
     - group: root
