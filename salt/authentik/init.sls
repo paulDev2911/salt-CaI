@@ -7,9 +7,9 @@
 {% set mode_compose = pillar.get('authentik:mode_compose', '0644') %}
 
 update_apt_cache:
-  pkg.refresh_db:
-    - refresh: True
-    - onlyif: test "$(salt-call --local grains.get os_family)" = "Debian"
+  cmd.run:
+    - name: apt-get update
+    - onlyif: test -f /etc/debian_version
 
 include:
   - base_server

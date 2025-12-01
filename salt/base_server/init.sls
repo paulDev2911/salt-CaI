@@ -11,6 +11,6 @@ include:
   - base_server.setup_fail2ban
   - base_server.sysctl_hardening
   - base_server.service_hardening
-  - base_server.setup_auditd
+#  - base_server.setup_auditd
   - base_server.setup_logging
   - base_server.unattended_services
