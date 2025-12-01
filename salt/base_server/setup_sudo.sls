@@ -2,26 +2,21 @@ install_sudo:
   pkg.installed:
     - name: sudo
 
-ensure_sudoers_exists:
-  file.exists:
-    - name: /etc/sudoers
-    - require:
-      - pkg: install_sudo
-
 ensure_sudo_group_exists:
   group.present:
     - name: sudo
     - system: True
 
-configure_sudo_group:
-  file.line:
+configure_sudoers:
+  file.managed:
     - name: /etc/sudoers
-    - content: '%sudo ALL=(ALL:ALL) ALL'
-    - mode: ensure
-    - after: '^root.*ALL'
+    - source: salt://base_server/files/sudoers.j2
+    - user: root
+    - group: root
+    - mode: '0440'
+    - template: jinja
     - require:
       - pkg: install_sudo
-      - file: ensure_sudoers_exists
       - group: ensure_sudo_group_exists
 
 sysadmin_user:
@@ -37,4 +32,4 @@ sysadmin_user:
       - sudo
     - require:
       - group: ensure_sudo_group_exists
-      - file: configure_sudo_group
+      - file: configure_sudoers

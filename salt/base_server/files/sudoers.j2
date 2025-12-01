@@ -1,0 +1,14 @@
+# /etc/sudoers - managed by Salt
+#
+Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Root
+root    ALL=(ALL:ALL) ALL
+
+# Sudo group
+%sudo   ALL=(ALL:ALL) ALL
+
+# Allow members of group sudo to execute any command
+@includedir /etc/sudoers.d
