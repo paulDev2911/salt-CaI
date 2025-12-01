@@ -1,6 +1,6 @@
 {% set hostname = pillar.get('base_server:hostname', grains['id']) %}
 
-{% if pillar.get('roles.base_server:hostname') %}
+{% if pillar.get('base_server:hostname') %}
 
 set_hostname:
   network.system:
