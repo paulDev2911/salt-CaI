@@ -18,6 +18,11 @@ authentik_directories:
       - {{ auth_dir }}/certs
     - mode: {{ mode_dir }}
     - makedirs: True
+  
+authentik_nftables:
+  allowed_ports:
+    - 9000/tcp
+    - 9443/tcp
 
 generate_authentik_secrets:
   cmd.run:

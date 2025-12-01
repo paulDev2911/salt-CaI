@@ -39,7 +39,7 @@ table inet filter {
         tcp dport $SSH_PORT ct state new add @ssh_ratelimit { ip saddr limit rate 5/minute } accept
         tcp dport $SSH_PORT ct state new log prefix "SSH RATE LIMIT: " drop
 
-        {% for port in allowed_ports %}
+        {% for port in pillar.get('nftables:allowed_ports', []) + allowed_ports %}
         {% if port != ssh_port ~ '/tcp' %}
         {% set port_number = port.split('/')[0] %}
         {% set port_proto = port.split('/')[1] %}
