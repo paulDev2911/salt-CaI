@@ -2,6 +2,12 @@ install_sudo:
   pkg.installed:
     - name: sudo
 
+ensure_sudoers_exists:
+  file.exists:
+    - name: /etc/sudoers
+    - require:
+      - pkg: install_sudo
+
 ensure_sudo_group_exists:
   group.present:
     - name: sudo
@@ -15,6 +21,7 @@ configure_sudo_group:
     - after: '^root.*ALL'
     - require:
       - pkg: install_sudo
+      - file: ensure_sudoers_exists
       - group: ensure_sudo_group_exists
 
 sysadmin_user:
