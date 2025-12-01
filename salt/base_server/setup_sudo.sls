@@ -2,43 +2,30 @@ install_sudo:
   pkg.installed:
     - name: sudo
 
+ensure_sudo_group_exists:
+  group.present:
+    - name: sudo
+    - system: True
+
 configure_sudo_group:
-  file.replace:
+  file.line:
     - name: /etc/sudoers
-    - pattern: '^%sudo\s+ALL=.*'
-    - repl: '%sudo ALL=(ALL:ALL) ALL'
-    - append_if_not_found: True
+    - content: '%sudo ALL=(ALL:ALL) ALL'
+    - mode: ensure
+    - after: '^root.*ALL'
     - require:
       - pkg: install_sudo
+      - group: ensure_sudo_group_exists
 
-validate_sudoers:
-  cmd.run:
-    - name: visudo -cf /etc/sudoers
-    - onchanges:
-      - file: configure_sudo_group
-
-ansible_user_sudo_group:
-  user.present:
-    - name: ansible
-    - groups:
-      - sudo
-    - remove_groups: False
-    - require:
-      - file: configure_sudo_group
-
-sysadmin_user_sudo_group:
+sysadmin_user:
   user.present:
     - name: sysadmin
+    - shell: /bin/bash
+    - home: /home/sysadmin
+    - createhome: True
+    - password: {{ pillar.get('sysadmin:password_hash') }}
     - groups:
       - sudo
-    - remove_groups: False
     - require:
+      - group: ensure_sudo_group_exists
       - file: configure_sudo_group
-
-final_validate_sudoers:
-  cmd.run:
-    - name: visudo -c
-    - require:
-      - file: configure_sudo_group
-      - user: ansible_user_sudo_group
-      - user: sysadmin_user_sudo_group
