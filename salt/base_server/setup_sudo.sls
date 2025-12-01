@@ -20,10 +20,12 @@ configure_sudo_group:
 sysadmin_user:
   user.present:
     - name: sysadmin
+    - password: {{ pillar.get('base_server:sysadmin_password_hash') }}
+    - hash_password: False
     - shell: /bin/bash
     - home: /home/sysadmin
     - createhome: True
-    - password: {{ pillar.get('sysadmin:password_hash') }}
+    - fullname: System Administrator
     - groups:
       - sudo
     - require:
