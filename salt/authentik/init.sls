@@ -12,8 +12,8 @@ update_apt_cache:
     - onlyif: test "$(salt-call --local grains.get os_family)" = "Debian"
 
 include:
-  - basic_server_setup
-  - setup_docker
+  - base_server
+  - docker
 
 authentik_directories:
   file.directory:
