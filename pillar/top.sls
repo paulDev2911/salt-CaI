@@ -1,9 +1,9 @@
 base:
   '*':
-    - roles.basic_server_setup
+    - services.base_server
 
   'pihole-*':
-    - others.setup_pihole
+    - services.pihole
 
   'prod-authentik':
-    - production.prod-authentik
+    - services.authentik
