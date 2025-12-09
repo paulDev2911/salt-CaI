@@ -9,7 +9,7 @@ creation_rules:
     age: >-
       age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu
   
-  # Shared (beide VMs können lesen)
+  # Shared
   - path_regex: pillar/secrets/shared\.yaml$
     age: >-
       age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu
