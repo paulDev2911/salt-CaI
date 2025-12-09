@@ -1,0 +1,15 @@
+creation_rules:
+  # Oracle-spezifisch
+  - path_regex: pillar/secrets/oracle\.yaml$
+    age: >-
+      age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu
+  
+  # Homelab-spezifisch
+  - path_regex: pillar/secrets/homelab\.yaml$
+    age: >-
+      age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu
+  
+  # Shared (beide VMs können lesen)
+  - path_regex: pillar/secrets/shared\.yaml$
+    age: >-
+      age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu
