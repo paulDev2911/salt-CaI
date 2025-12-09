@@ -1,9 +1,11 @@
 base:
   '*':
     - services.base_server
-
-  'pihole-*':
-    - services.pihole
+    - secrets.shared
 
   'prod-authentik':
     - services.authentik
+    - secrets.homelab
+
+  'oracle-*':
+    - secrets.oraclevirt

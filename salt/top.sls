@@ -5,3 +5,7 @@ base:
   'prod-authentik':
     - docker
     - authentik
+
+  'oracle-*':
+    - docker
+    - nextcloud
