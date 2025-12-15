@@ -1,0 +1,12 @@
+services:
+  pomerium:
+    image: {{ pillar['pomerium']['pomerium_image'] }}
+    volumes:
+      - ./config.yaml:/pomerium/config.yaml:ro
+    ports:
+      - {{ pillar['pomerium']['https_port'] }}:443
+  
+  verify:
+    image: {{ pillar['pomerium']['verify_image'] }}
+    expose:
+      - {{ pillar['pomerium']['verify_port'] }}

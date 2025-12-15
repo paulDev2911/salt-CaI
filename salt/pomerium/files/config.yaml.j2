@@ -1,0 +1,10 @@
+authenticate_service_url: {{ pillar['pomerium']['authenticate_url'] }}
+
+routes:
+  - from: https://{{ pillar['pomerium']['verify_domain'] }}
+    to: http://verify:{{ pillar['pomerium']['verify_port'] }}
+    policy:
+      - allow:
+          or:
+            - email:
+                is: {{ pillar['pomerium']['admin_email'] }}

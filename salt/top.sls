@@ -9,3 +9,7 @@ base:
   'oracle-*':
     - docker
     - nextcloud
+  
+  'prod-pomerium':
+    - docker
+    - pomerium
