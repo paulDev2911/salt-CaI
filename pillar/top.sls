@@ -1,11 +1,14 @@
 base:
   '*':
     - services.base_server
-    - secrets.shared
-
+  
+  'pihole-*':
+    - services.pihole
+  
   'prod-authentik':
     - services.authentik
     - secrets.homelab
-
-  'oracle-*':
-    - secrets.oraclevirt
+  
+  'prod-pomerium':
+    - services.pomerium
+    - secrets.pomerium
