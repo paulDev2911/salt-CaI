@@ -1,4 +1,8 @@
 pomerium:
+
+  allowed_ports:
+    - 443/tcp
+    
   project_dir: /opt/pomerium_quickstart
   config_file: /opt/pomerium_quickstart/config.yaml
   compose_file: /opt/pomerium_quickstart/docker-compose.yaml
