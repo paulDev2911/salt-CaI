@@ -1,3 +1,7 @@
+include:
+  - base_server
+  - docker
+
 pomerium_project_dir:
   file.directory:
     - name: {{ pillar['pomerium']['project_dir'] }}
@@ -35,4 +39,4 @@ pomerium_docker_up:
     - require:
       - file: pomerium_config_file
       - file: pomerium_docker_compose_file
-      - service: docker_service
+      - sls: docker
