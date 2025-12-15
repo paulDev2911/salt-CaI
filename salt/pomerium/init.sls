@@ -1,5 +1,16 @@
 include:
+  - base_server
   - docker
+
+# Firewall: Port 443 öffnen
+pomerium_firewall_port:
+  file.append:
+    - name: /etc/nftables.conf
+    - text: |
+        # Pomerium HTTPS
+        tcp dport 443 accept
+    - require:
+      - sls: base_server
 
 pomerium_project_dir:
   file.directory:
