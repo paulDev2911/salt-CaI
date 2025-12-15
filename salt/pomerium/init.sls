@@ -1,5 +1,4 @@
 include:
-  - base_server
   - docker
 
 pomerium_project_dir:
