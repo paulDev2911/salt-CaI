@@ -13,3 +13,7 @@ base:
   'prod-pomerium':
     - docker
     - pomerium
+
+  'oracle-headscale':
+    - base_server
+    - headscale
