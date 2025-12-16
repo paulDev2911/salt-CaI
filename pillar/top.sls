@@ -6,3 +6,7 @@ base:
   'prod-pomerium':
     - services.pomerium
     - secrets.pomerium
+
+  'oracle-headscale':
+    - services.headscale
+    - secrets.headscale
