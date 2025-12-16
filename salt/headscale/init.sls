@@ -1,4 +1,4 @@
-{% set headscale_version = pillar.get('headscale:version', '0.23.0') %}
+{% set headscale_version = pillar.get('headscale:version', '0.27.1') %}
 {% set headscale_arch = grains['osarch'] if grains['osarch'] == 'amd64' else 'arm64' %}
 
 headscale_download:
