@@ -1,0 +1,154 @@
+# salt/headscale/files/config.yaml.jinja
+---
+# Headscale Configuration
+# Managed by SaltStack - DO NOT EDIT MANUALLY
+
+{% set hs = pillar.get('headscale', {}) %}
+
+# Public server URL for clients to connect
+server_url: {{ hs.server_url }}
+
+# Listen on all interfaces for production
+listen_addr: {{ hs.get('listen_addr', '0.0.0.0:8080') }}
+
+# Metrics endpoint (keep internal)
+metrics_listen_addr: {{ hs.get('metrics_listen_addr', '127.0.0.1:9090') }}
+
+# gRPC for remote CLI management
+grpc_listen_addr: {{ hs.get('grpc_listen_addr', '0.0.0.0:50443') }}
+grpc_allow_insecure: false
+
+# Noise protocol configuration
+noise:
+  private_key_path: /var/lib/headscale/noise_private.key
+
+# IP allocation for Tailscale network
+prefixes:
+  v4: {{ hs.get('prefix_v4', '100.64.0.0/10') }}
+  v6: {{ hs.get('prefix_v6', 'fd7a:115c:a1e0::/48') }}
+  allocation: {{ hs.get('allocation_strategy', 'sequential') }}
+
+# DERP relay configuration
+derp:
+  server:
+    # Use Tailscale's public DERP servers
+    enabled: false
+  
+  urls:
+    - https://controlplane.tailscale.com/derpmap/default
+  
+  paths: []
+  
+  auto_update_enabled: true
+  update_frequency: 3h
+
+disable_check_updates: false
+
+ephemeral_node_inactivity_timeout: 30m
+
+# Database configuration
+database:
+  type: sqlite
+  debug: false
+  
+  gorm:
+    prepare_stmt: true
+    parameterized_queries: true
+    skip_err_record_not_found: true
+    slow_threshold: 1000
+  
+  sqlite:
+    path: /var/lib/headscale/db.sqlite
+    write_ahead_log: true
+    wal_autocheckpoint: 1000
+
+# TLS/ACME configuration
+acme_url: https://acme-v02.api.letsencrypt.org/directory
+acme_email: {{ hs.get('acme_email', '') }}
+tls_letsencrypt_hostname: {{ hs.get('tls_hostname', '') }}
+tls_letsencrypt_cache_dir: /var/lib/headscale/cache
+tls_letsencrypt_challenge_type: HTTP-01
+tls_letsencrypt_listen: ":http"
+
+# Custom TLS certificates (if not using Let's Encrypt)
+tls_cert_path: {{ hs.get('tls_cert_path', '') }}
+tls_key_path: {{ hs.get('tls_key_path', '') }}
+
+# Logging
+log:
+  level: {{ hs.get('log_level', 'info') }}
+  format: {{ hs.get('log_format', 'text') }}
+
+# ACL Policy
+policy:
+  mode: file
+  path: {{ hs.get('acl_policy_path', '/etc/headscale/acl.json') }}
+
+# DNS and MagicDNS configuration
+dns:
+  magic_dns: true
+  base_domain: {{ hs.dns.base_domain }}
+  override_local_dns: true
+  
+  nameservers:
+    global:
+{% for ns in hs.dns.get('nameservers', ['1.1.1.1', '1.0.0.1']) %}
+      - {{ ns }}
+{% endfor %}
+    
+    split: {}
+  
+  search_domains: []
+  
+  extra_records:
+{% if hs.dns.get('extra_records') %}
+{% for record in hs.dns.extra_records %}
+    - name: {{ record.name }}
+      type: {{ record.type }}
+      value: {{ record.value }}
+{% endfor %}
+{% else %}
+    []
+{% endif %}
+
+# Unix socket for CLI
+unix_socket: /var/run/headscale/headscale.sock
+unix_socket_permission: "0770"
+
+{% if hs.get('oidc') %}
+# OpenID Connect (Authentik Integration)
+oidc:
+  only_start_if_oidc_is_available: {{ hs.oidc.get('only_start_if_available', true) | lower }}
+  issuer: {{ hs.oidc.issuer }}
+  client_id: {{ hs.oidc.client_id }}
+  client_secret_path: {{ hs.oidc.get('client_secret_path', '${CREDENTIALS_DIRECTORY}/oidc_client_secret') }}
+  expiry: {{ hs.oidc.get('expiry', '180d') }}
+  use_expiry_from_token: false
+  scope:
+{% for scope in hs.oidc.get('scope', ['openid', 'profile', 'email']) %}
+    - {{ scope }}
+{% endfor %}
+{% if hs.oidc.get('allowed_domains') %}
+  allowed_domains:
+{% for domain in hs.oidc.allowed_domains %}
+    - {{ domain }}
+{% endfor %}
+{% endif %}
+{% if hs.oidc.get('allowed_users') %}
+  allowed_users:
+{% for user in hs.oidc.allowed_users %}
+    - {{ user }}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+# Logtail (disabled - no data to Tailscale Inc)
+logtail:
+  enabled: false
+
+# WireGuard port randomization
+randomize_client_port: {{ hs.get('randomize_client_port', false) | lower }}
+
+# Taildrop file sharing
+taildrop:
+  enabled: {{ hs.get('taildrop_enabled', true) | lower }}

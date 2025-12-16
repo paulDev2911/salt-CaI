@@ -1,8 +1,10 @@
 creation_rules:
+  # base_server
   - path_regex: pillar/secrets/base_server\.yaml$
     age: >-
       age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu
   
+  # Pomerium-spezifisch
   - path_regex: pillar/secrets/pomerium\.yaml$
     age: >-
       age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu
