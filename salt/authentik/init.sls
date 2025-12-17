@@ -4,7 +4,7 @@
 # Include Docker State
 include:
   - docker
-  - caddy
+  - caddy_authentik
 
 # Create Authentik directory
 authentik_directory:
