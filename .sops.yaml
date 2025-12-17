@@ -3,10 +3,14 @@ creation_rules:
   - path_regex: pillar/secrets/base_server\.yaml$
     age: age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu,age1uc6agaf37nvts2mgla6v54mlucf0q7076jedw88qmpckdd8ztpdq27vryk
   
-  # Pomerium-spezifisch
+  # Pomerium
   - path_regex: pillar/secrets/pomerium\.yaml$
     age: age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu,age1uc6agaf37nvts2mgla6v54mlucf0q7076jedw88qmpckdd8ztpdq27vryk
 
-  # Headscale-spezifisch
+  # Headscale
   - path_regex: pillar/secrets/headscale\.yaml$
+    age: age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu,age1uc6agaf37nvts2mgla6v54mlucf0q7076jedw88qmpckdd8ztpdq27vryk
+
+  # Authentik
+  - path_regex: pillar/secrets/authentik\.yaml$
     age: age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu,age1uc6agaf37nvts2mgla6v54mlucf0q7076jedw88qmpckdd8ztpdq27vryk

@@ -10,3 +10,7 @@ base:
   'oracle-headscale':
     - services.headscale
     - secrets.headscale
+
+  'authentik-server':
+    - services.authentik
+    - secrets.authentik

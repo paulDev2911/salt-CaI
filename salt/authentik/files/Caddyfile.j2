@@ -1,0 +1,13 @@
+{% set ak = pillar.get('authentik', {}) %}
+
+{{ ak.domain }} {
+    reverse_proxy localhost:{{ ak.ports.http }} {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+    
+    # Self-signed cert für internal Tailscale
+    tls internal
+}
