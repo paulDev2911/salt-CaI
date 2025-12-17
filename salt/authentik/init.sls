@@ -126,8 +126,6 @@ authentik_caddy_config:
     - user: root
     - group: root
     - mode: '0644'
-    - require:
-      - sls: caddy
 
 # Reload Caddy
 authentik_caddy_reload:
