@@ -1,8 +1,10 @@
 headscale:
   version: 0.27.1
   
-  server_url: https://headscale.ilpaa.xyz:443
+  server_url: https://headscale.ilpaa.xyz
+  
   listen_addr: 0.0.0.0:8080
+  
   metrics_listen_addr: 127.0.0.1:9090
   grpc_listen_addr: 0.0.0.0:50443
   
@@ -15,9 +17,11 @@ headscale:
       - 1.0.0.1
   
   acl_policy_path: /etc/headscale/acl.json
-  
   log_level: info
   log_format: json
   
   randomize_client_port: false
   taildrop_enabled: true
+  
+  caddy:
+    domain: headscale.ilpaa.xyz

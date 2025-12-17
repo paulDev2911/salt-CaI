@@ -1,6 +1,10 @@
 {% set headscale_version = pillar.get('headscale:version', '0.27.1') %}
 {% set headscale_arch = grains['osarch'] if grains['osarch'] == 'amd64' else 'arm64' %}
 
+# Caddy muss VOR Headscale installiert werden
+include:
+  - caddy
+
 headscale_download:
   file.managed:
     - name: /tmp/headscale.deb
@@ -47,3 +51,4 @@ headscale_service:
     - require:
       - cmd: headscale_install
       - file: headscale_acl
+      - sls: caddy
