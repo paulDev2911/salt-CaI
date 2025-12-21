@@ -17,3 +17,4 @@ base:
 
   'mediaserver':
     - secrets.mullvad-media
+    - secrets.slskd
