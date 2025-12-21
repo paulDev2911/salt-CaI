@@ -43,7 +43,6 @@ qbittorrent_container:
           lscr.io/linuxserver/qbittorrent:latest
     - unless: docker ps | grep -q qbittorrent
     - require:
-      - cmd: qbittorrent_wait_gluetun
       - cmd: qbittorrent_pull_image
       - file: qbittorrent_config_directory
       - file: qbittorrent_downloads_directory
