@@ -1,3 +1,5 @@
+# /srv/salt/media-stack/qbittorrent.sls
+
 qbittorrent_config_directory:
   file.directory:
     - name: /opt/qbittorrent/config
@@ -14,54 +16,25 @@ qbittorrent_downloads_directory:
     - mode: 755
     - makedirs: True
 
-qbittorrent_gluetun_port:
-  cmd.run:
-    - name: |
-        docker stop gluetun
-        docker rm gluetun
-        docker run -d \
-          --name gluetun \
-          --cap-add=NET_ADMIN \
-          --device=/dev/net/tun \
-          -e VPN_SERVICE_PROVIDER=custom \
-          -e VPN_TYPE=wireguard \
-          -e VPN_ENDPOINT_IP={{ pillar['mullvad_media']['endpoint'].split(':')[0] }} \
-          -e VPN_ENDPOINT_PORT={{ pillar['mullvad_media']['endpoint'].split(':')[1] }} \
-          -e WIREGUARD_PRIVATE_KEY={{ pillar['mullvad_media']['private_key'] }} \
-          -e WIREGUARD_PUBLIC_KEY={{ pillar['mullvad_media']['public_key'] }} \
-          -e WIREGUARD_ADDRESSES={{ pillar['mullvad_media']['addresses'] }} \
-          -e TZ=Europe/Berlin \
-          -e FIREWALL_VPN_INPUT_PORTS=8112 \
-          -e HTTPPROXY=off \
-          -e SHADOWSOCKS=off \
-          -p 8888:8888/tcp \
-          -p 8388:8388/tcp \
-          -p 8388:8388/udp \
-          -p 8112:8112/tcp \
-          -v /opt/gluetun:/gluetun \
-          --network media-net \
-          --restart unless-stopped \
-          qmcgaw/gluetun:latest
-    - onlyif: docker ps | grep gluetun | grep -qv 8112
-
-# Wait for gluetun to be ready
+# Warte bis gluetun läuft
 qbittorrent_wait_gluetun:
   cmd.run:
-    - name: sleep 10
-    - require:
-      - cmd: qbittorrent_gluetun_port
+    - name: timeout 60 bash -c 'until docker ps | grep gluetun | grep -q healthy; do sleep 2; done'
 
+# Stop old qbittorrent if exists
 qbittorrent_stop_old:
   cmd.run:
     - name: docker stop qbittorrent && docker rm qbittorrent || true
     - onlyif: docker ps -a | grep -q qbittorrent
 
+# Pull qbittorrent image
 qbittorrent_pull_image:
   cmd.run:
     - name: docker pull lscr.io/linuxserver/qbittorrent:latest
     - require:
       - file: qbittorrent_config_directory
 
+# Run qbittorrent container (über gluetun VPN)
 qbittorrent_container:
   cmd.run:
     - name: |

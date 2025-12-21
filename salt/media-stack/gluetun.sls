@@ -53,6 +53,7 @@ gluetun_container:
           -p 8888:8888/tcp \
           -p 8388:8388/tcp \
           -p 8388:8388/udp \
+          -p 8112:8112/tcp \
           -v /opt/gluetun:/gluetun \
           --network media-net \
           --restart unless-stopped \
