@@ -79,14 +79,14 @@ slskd_container:
         docker run -d \
           --name slskd \
           --network container:gluetun \
-          -e SLSKD_SLSK_USERNAME={{ slskd['username'] }} \
-          -e SLSKD_SLSK_PASSWORD={{ slskd['password'] }} \
+          -e SLSKD_SLSK_USERNAME={{ pillar['slskd']['username'] }} \
+          -e SLSKD_SLSK_PASSWORD={{ pillar['slskd']['password'] }} \
           -e SLSKD_NO_AUTH=true \
           -e SLSKD_SLSK_LISTEN_PORT=2234 \
           -e PUID=1000 \
           -e PGID=1000 \
           -v /opt/slskd/config:/app \
-          -v /opt/slskd/music:/music \
+          -v /mnt/media/music:/music \
           -v /opt/slskd/incomplete:/incomplete \
           --restart unless-stopped \
           slskd/slskd:latest \
