@@ -9,3 +9,6 @@ base:
   'oracle-headscale':
     - base_server
     - headscale
+  
+  'mediaserver':
+    - media-stack

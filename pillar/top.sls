@@ -14,3 +14,6 @@ base:
   'authentik-server':
     - services.authentik
     - secrets.authentik
+
+  'mediaserver':
+    - mullvad

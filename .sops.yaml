@@ -14,3 +14,7 @@ creation_rules:
   # Authentik
   - path_regex: pillar/secrets/authentik\.yaml$
     age: age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu,age1uc6agaf37nvts2mgla6v54mlucf0q7076jedw88qmpckdd8ztpdq27vryk
+
+  # media-stack-mullvad
+  - path_regex: pillar/secrets/mullvad-media\.yaml$
+    age: age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu,age1uc6agaf37nvts2mgla6v54mlucf0q7076jedw88qmpckdd8ztpdq27vryk
