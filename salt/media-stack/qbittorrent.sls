@@ -16,25 +16,17 @@ qbittorrent_downloads_directory:
     - mode: 755
     - makedirs: True
 
-# Warte bis gluetun läuft
-qbittorrent_wait_gluetun:
-  cmd.run:
-    - name: timeout 60 bash -c 'until docker ps | grep gluetun | grep -q healthy; do sleep 2; done'
-
-# Stop old qbittorrent if exists
 qbittorrent_stop_old:
   cmd.run:
     - name: docker stop qbittorrent && docker rm qbittorrent || true
     - onlyif: docker ps -a | grep -q qbittorrent
 
-# Pull qbittorrent image
 qbittorrent_pull_image:
   cmd.run:
     - name: docker pull lscr.io/linuxserver/qbittorrent:latest
     - require:
       - file: qbittorrent_config_directory
 
-# Run qbittorrent container (über gluetun VPN)
 qbittorrent_container:
   cmd.run:
     - name: |
