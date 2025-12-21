@@ -16,4 +16,4 @@ base:
     - secrets.authentik
 
   'mediaserver':
-    - mullvad
+    - secrets.mullvad-media
