@@ -12,3 +12,6 @@ base:
   
   'mediaserver':
     - media-stack
+  
+  'hetzner-navidrome':
+  - navidrome

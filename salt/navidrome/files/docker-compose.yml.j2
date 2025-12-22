@@ -1,0 +1,20 @@
+{% set nv = pillar.get('navidrome', {}) %}
+---
+version: "3.8"
+
+services:
+  navidrome:
+    image: deluan/navidrome:{{ nv.version }}
+    container_name: navidrome
+    restart: unless-stopped
+    user: 1000:1000
+    ports:
+      - "127.0.0.1:{{ nv.port }}:4533"
+    environment:
+      ND_SCANSCHEDULE: "1h"
+      ND_LOGLEVEL: "info"
+      ND_SESSIONTIMEOUT: "24h"
+      ND_BASEURL: ""
+    volumes:
+      - {{ nv.data_dir }}:/data
+      - {{ nv.storage.mount_point }}/music:{{ nv.music_folder }}:ro

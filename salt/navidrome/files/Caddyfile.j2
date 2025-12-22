@@ -1,0 +1,13 @@
+{% set nv = pillar.get('navidrome', {}) %}
+
+{{ nv.domain }} {
+    reverse_proxy localhost:{{ nv.port }} {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+    
+    # Self-signed cert for internal Tailscale
+    tls internal
+}

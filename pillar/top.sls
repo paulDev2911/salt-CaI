@@ -18,3 +18,7 @@ base:
   'mediaserver':
     - secrets.mullvad-media
     - secrets.slskd
+  
+  'hetzner-navidrome':
+    - services.navidrome
+    - secrets.navidrome
