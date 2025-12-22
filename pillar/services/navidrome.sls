@@ -12,7 +12,7 @@ navidrome:
   # Storage Box Mount
   storage:
     mount_point: /mnt/storagebox
-    host: u123456.your-storagebox.de
+    host: u522285.your-storagebox.de
     remote_path: /music
     local_path: /mnt/storagebox/music
   
