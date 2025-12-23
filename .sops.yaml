@@ -26,3 +26,7 @@ creation_rules:
   # Navidrome
   - path_regex: pillar/secrets/navidrome\.yaml$
     age: age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu,age1uc6agaf37nvts2mgla6v54mlucf0q7076jedw88qmpckdd8ztpdq27vryk
+
+  # Headscale-Preauthkeys
+  - path_regex: pillar/secrets/headscale-preauthkeys\.yaml$
+    age: age19vf4528tkqxv9tm3ceckazupe9jv7ng8lx28l4xef94pxrlc5fqql8hnwu,age1uc6agaf37nvts2mgla6v54mlucf0q7076jedw88qmpckdd8ztpdq27vryk
