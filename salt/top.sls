@@ -4,6 +4,7 @@ base:
   
   'prod-pomerium':
     - docker
+    - headscale-client
     - pomerium
 
   'oracle-headscale':
@@ -14,4 +15,5 @@ base:
     - media-stack
   
   'hetzner-navidrome':
+  - headscale-client
   - navidrome

@@ -6,6 +6,7 @@ base:
   'prod-pomerium':
     - services.pomerium
     - secrets.pomerium
+    - secrets.headscale-preauthkeys
 
   'oracle-headscale':
     - services.headscale
@@ -14,6 +15,7 @@ base:
   'authentik-server':
     - services.authentik
     - secrets.authentik
+    - secrets.headscale-preauthkeys
 
   'mediaserver':
     - secrets.mullvad-media
@@ -22,3 +24,4 @@ base:
   'hetzner-navidrome':
     - services.navidrome
     - secrets.navidrome
+    - secrets.headscale-preauthkeys
